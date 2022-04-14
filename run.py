@@ -102,7 +102,7 @@ for subject in keypoints.keys():
     for action in keypoints[subject]:
         for cam_idx, kps in enumerate(keypoints[subject][action]):
             # Normalize camera frame
-            cam = dataset.cameras()[subject][cam_idx]
+            cam = dataset.cameras()[subject][cam_idx] #.cameras() will return self._camera (h36m_cameras_extrinsic_params)
             kps[..., :2] = normalize_screen_coordinates(kps[..., :2], w=cam['res_w'], h=cam['res_h'])
             kps = kps[:,:,:2]
             name = subject+'_'+action+'.'+str(cam_idx)
@@ -243,7 +243,7 @@ if not args.evaluate:
     cameras_train, poses_train, poses_train_2d = fetch(subjects_train, action_filter, subset=args.subset)
 
     lr = args.learning_rate
-    
+    # Adam 有 amsgrad=True performance 好再好一點點
     optimizer = optim.Adam(model_pos_train.parameters(), lr=lr, amsgrad=True)
         
     lr_decay = args.lr_decay
@@ -262,6 +262,8 @@ if not args.evaluate:
                                        kps_left=kps_left, kps_right=kps_right, joints_left=joints_left, joints_right=joints_right)
     train_generator_eval = UnchunkedGenerator(cameras_train, poses_train, poses_train_2d,
                                               pad=pad, causal_shift=causal_shift, augment=False)
+
+    # print("\n\n\n\n\nSee len(train_generator)", len(train_generator)) # Poseaug error
     print('INFO: Training on {} frames'.format(train_generator_eval.num_frames()))
 
     if args.resume:
@@ -441,6 +443,7 @@ def evaluate(test_generator, action=None, return_predictions=False):
               inputs_3d[:, :, 0] = 0    
 
             inputs_2d = inputs_2d.view(inputs_2d.size(0), inputs_2d.size(1), -1, 3)
+            # print("To see inputs_2d in run.py run 444\n", inputs_2d, "\n\n\n")
             predicted_3d_pos = model_pos(inputs_2d)
             
             if test_generator.augment_enabled():

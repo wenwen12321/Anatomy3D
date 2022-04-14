@@ -210,6 +210,7 @@ class Human36mDataset(MocapDataset):
     def __init__(self, path, remove_static_joints=True):
         super().__init__(fps=50, skeleton=h36m_skeleton)
         
+        # deepcopy 會建立一份完全獨立的變數
         self._cameras = copy.deepcopy(h36m_cameras_extrinsic_params)
         for cameras in self._cameras.values():
             for i, cam in enumerate(cameras):

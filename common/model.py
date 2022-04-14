@@ -106,6 +106,9 @@ class TemporalModel(TemporalModelBase):
         causal -- use causal convolutions instead of symmetric convolutions (for real-time applications)
         dropout -- dropout probability
         channels -- number of convolution channels
+
+        Output:
+        x -- final 3D joint locations (by bone_direction * bone_length )
         """
         super().__init__(num_joints_in, in_features, num_joints_out, filter_widths, causal, dropout, channels)
         # Bottom layers
