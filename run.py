@@ -27,7 +27,8 @@ from common.utils import deterministic_random
 import random
 import os
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2"
+# os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
 #torch.backends.cudnn.benchmark=True
 args = parse_args()
 print(args)
@@ -117,7 +118,7 @@ for subject in keypoints.keys():
                 s = np.concatenate(s2,0)
               s = np.reshape(s, (len(s),np.shape(kps)[1],1))
               # concatenate the 2D keypoints and visibility scores, N*K*3
-              kps = np.concatenate((kps,s),2)
+              kps = np.concatenate((kps,s),2) # new kps (2843, 17, 3) = 【kps (2843, 17, 2) concatenate s (2843, 17, 1)】
             keypoints[subject][action][cam_idx] = kps
 
 
@@ -204,9 +205,10 @@ model_pos = TemporalModel(poses_valid_2d[0].shape[-2], poses_valid_2d[0].shape[-
                             filter_widths=filter_widths, causal=args.causal, dropout=args.dropout, channels=args.channels,
                             dense=args.dense)
 
-model_pos_train=nn.DataParallel(model_pos_train,device_ids=[0,1,2]) # multi-GPU
-model_pos=nn.DataParallel(model_pos,device_ids=[0,1,2]) # multi-GPU
-
+# model_pos_train=nn.DataParallel(model_pos_train,device_ids=[0,1,2]) # multi-GPU
+# model_pos=nn.DataParallel(model_pos,device_ids=[0,1,2]) # multi-GPU
+model_pos_train=nn.DataParallel(model_pos_train,device_ids=[0,1]) # multi-GPU
+model_pos=nn.DataParallel(model_pos,device_ids=[0,1]) # multi-GPU
 
 receptive_field = model_pos.module.receptive_field()
 print('INFO: Receptive field: {} frames'.format(receptive_field))

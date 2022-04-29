@@ -78,4 +78,12 @@ print('shape of z: ', z.shape) # output: (1, 1383, 96) # 有 1383 個 frames, 32
 print('shape of z[0]: ', z[0][0].shape) # output: (1, 1383, 96)
 print('shape of z[0]: ', z[0][0]) # output: (1, 1383, 96)
 
+##################################################################
+# 看 score.pkl 跟 cdf檔 的維度 一不一樣 => case pf S11 Directions.cdf
+path = './data/h36m/S11/MyPoseFeatures/D3_Positions/Directions.cdf'
+
+cdf_file = cdflib.CDF(path)
+
+x = cdf_file.varget("Pose")
+print("\nget x's pose: \n", x)
 

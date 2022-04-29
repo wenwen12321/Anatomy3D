@@ -5,8 +5,9 @@
 # https://www.796t.com/article.php?id=144889
 import numpy as np
 
-# path = './data/data_2d_h36m_gt.npz'
-path = './data/data_2d_h36m_cpn_ft_h36m_dbb.npz'
+path = './data/data_2d_h36m_gt.npz'                      # 有 ['positions_2d', 'metadata'] # 【'metadata'】: {'num_joints': 17, 'keypoints_symmetry': [[4, 5, 6, 11, 12, 13], [1, 2, 3, 14, 15, 16]]}
+# path = './data/data_2d_h36m_cpn_ft_h36m_dbb.npz'       # 有 ['positions_2d', 'metadata'] # 【'metadata'】: {'layout_name': 'h36m', 'num_joints': 17, 'keypoints_symmetry': [[4, 5, 6, 11, 12, 13], [1, 2, 3, 14, 15, 16]]} 
+# path = './data/data_2d_h36m_hr.npz'                    # 只有 ['positions_2d'] (可能要再重做 preprocessing)
 data = np.load(path, allow_pickle=True)
 
 lst = data.files
